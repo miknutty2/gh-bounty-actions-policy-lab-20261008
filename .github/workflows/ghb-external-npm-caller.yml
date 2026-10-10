@@ -1,0 +1,12 @@
+name: Harmless cross-repository npm trust check
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  call_owner_workflow:
+    uses: miknutty2/actions-policy-call-poc-0b64bb15d5/.github/workflows/ghb-npm-oidc.yml@main

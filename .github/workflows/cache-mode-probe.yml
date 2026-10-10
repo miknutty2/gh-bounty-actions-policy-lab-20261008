@@ -1,0 +1,36 @@
+name: Cache Mode Boundary Probe
+on:
+  push:
+    paths:
+      - .github/workflows/cache-mode-probe.yml
+  issues:
+    types: [opened]
+permissions:
+  contents: read
+jobs:
+  seed:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    cache-mode: write
+    steps:
+      - name: Create harmless marker
+        run: mkdir -p cache-probe && echo GH_BOUNTY_CACHE_MODE_MARKER_20261009 > cache-probe/marker.txt
+      - name: Save marker cache
+        uses: actions/cache/save@v4
+        with:
+          path: cache-probe
+          key: gh-bounty-cache-mode-20261009
+  attempt:
+    if: github.event_name == 'issues'
+    runs-on: ubuntu-latest
+    cache-mode: read
+    steps:
+      - name: Create harmless contributor marker
+        run: mkdir -p cache-probe && echo GH_BOUNTY_CACHE_WRITE_ATTEMPT_20261009 > cache-probe/write-marker.txt
+      - name: Attempt save with local mode override
+        uses: actions/cache/save@v4
+        env:
+          ACTIONS_CACHE_MODE: write
+        with:
+          path: cache-probe
+          key: gh-bounty-cache-write-bypass-20261009

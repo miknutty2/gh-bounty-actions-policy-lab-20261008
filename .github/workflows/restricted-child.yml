@@ -1,0 +1,10 @@
+name: Restricted Child Probe
+on:
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo GH_BOUNTY_REUSABLE_CHILD_EXECUTED_20261009
